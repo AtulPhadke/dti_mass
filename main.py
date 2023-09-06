@@ -14,7 +14,7 @@ import math
 import inquirer as iq
 import shutil
 
-folder = "lsd_data"
+folder = ""
 
 
 def checkMethod(scan_set):
