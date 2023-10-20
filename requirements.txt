@@ -8,4 +8,4 @@ simpleitk==2.2.1
 tkscrolledframe==1.0.4
 PyQt5==5.15.9
 scipy==1.10.0
-firebase_admin
+firebase_admin==6.2.0
