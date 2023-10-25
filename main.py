@@ -1,10 +1,11 @@
+print("Loading")
 import os
-import re
 import nibabel as nib
 import numpy as np
 import math
 import inquirer as iq
 import shutil
+from brukerapi.dataset import Dataset
 from tkinter import filedialog
 from dti import DTI
 from visual import qualityChecker
@@ -16,6 +17,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 from uuid import getnode as get_mac
 import sys
+
 print("Checking License")
 warnings.filterwarnings("ignore")
 
@@ -124,10 +126,11 @@ class Pipeline:
 						self.dti_instance.generate_bvals(method_file, OUTPUT_DIR, (os.path.basename(scan) + "_"+str(os.path.basename(number))+".nii"), self.direction_omitter[(os.path.basename(scan) + "_"+str(os.path.basename(number))+".nii")])
 						tenfit = self.dti_instance.dti_fit(OUTPUT_DIR, img, (os.path.basename(scan) + "_"+str(os.path.basename(number))+".nii"))
 						if self.bool_b0:
-							img.header["pixdim"][1] = dim[0]
-							img.header["pixdim"][2] = dim[1]
-							img.header["pixdim"][3] = dim[2]
-							nib.save(nib.Nifti1Image(img.get_fdata()[:,:,:,0], None), os.path.join(OUTPUT_DIR, os.path.basename(scan) + "_"+str(os.path.basename(number))+"_b0.nii"))
+							b0 = nib.Nifti1Image(img.get_fdata()[:,:,:,0], None)
+							b0.header["pixdim"][1] = dim[0]
+							b0.header["pixdim"][2] = dim[1]
+							b0.header["pixdim"][3] = dim[2]
+							nib.save(b0, os.path.join(OUTPUT_DIR, os.path.basename(scan) + "_"+str(os.path.basename(number))+"_b0.nii"))
 							print("Saved " + os.path.join(OUTPUT_DIR, os.path.basename(scan) + "_"+str(os.path.basename(number))+"_b0.nii"))
 						if self.bool_fa:
 							fa = nib.Nifti1Image(tenfit.fa, None)
